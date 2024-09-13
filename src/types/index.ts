@@ -1,4 +1,5 @@
-export type TransformStatus = "Failed" | "Running" | "Succeeded" | "Rejected";
+export type TransformStatus = "Failed" | "Running" | "Succeeded" |
+  "Rejected" | "Deleted" | "Expired" | "NotStarted"
 
 export enum State {
   Uploading,
@@ -8,15 +9,17 @@ export enum State {
 
 
 export enum Engine {
-  SuntownEnhance,
-  SuntownStandard,
-  Azure,
-  Sonix
+  SuntownEnhance = "SuntownEnhance",
+  SuntownStandard = "SuntownStandard",
+  Azure = "Azure",
+  Sonix = "Sonix"
 }
 
 
 export interface IResult {
   engineName: string
   status: TransformStatus,
-  duration: number,
+  startTime?: number,
+  endTime?: number,
+  jobId?: string
 }

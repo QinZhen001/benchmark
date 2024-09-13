@@ -2,7 +2,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { message, Upload } from 'antd';
 import { uploadFile, useAppDispatch, useAppSelector } from '../../common'
-import { setFileName, setState } from '../../store/reducers/global'
+import { setFileName, setState, setFileUrl } from '../../store/reducers/global'
 
 import './index.css';
 import { State } from '/src/types';
@@ -26,9 +26,13 @@ const beforeUpload = (file: File) => {
 
 const MyUpload = () => {
   const state = useAppSelector((state) => state.global.state)
+  const fileName = useAppSelector((state) => state.global.fileName)
   const dispatch = useAppDispatch()
 
   const onClickNext = () => {
+    if (!fileName) {
+      return message.error('Please upload a file first')
+    }
     dispatch(setState(State.Selecting))
   }
 
@@ -53,9 +57,10 @@ const MyUpload = () => {
         console.log(info.file, info.fileList);
       }
       if (status === 'done') {
-        console.log("done", info.file.name)
+        console.log("done", info)
+        dispatch(setFileUrl(info.file.response))
         dispatch(setFileName(info.file.name))
-        // message.success(`${info.file.name} file uploaded successfully.`);
+        message.success(`${info.file.name} file uploaded successfully.`);
       } else if (status === 'error') {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -75,9 +80,9 @@ const MyUpload = () => {
         支持格式：mp3,wav,flac,aac,pcm,ogg,arm,asf (最大不得超过 300M)
       </p>
     </Dragger>
-    <div className='upload-button-wrapper'>
+    {fileName ? <div className='upload-button-wrapper'>
       <div className='next-button' onClick={onClickNext}>下一步</div>
-    </div>
+    </div> : null}
   </div>
 }
 

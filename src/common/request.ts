@@ -1,4 +1,7 @@
-const PREFIX_URL = "https://stt-benchmark-service.la3.agoralab.co/v1/"
+import { message } from "antd"
+import { LANGUAGE_OPTIONS } from "./constant"
+
+const PREFIX_URL = "https://stt-benchmark-service.la3.agoralab.co/v1"
 
 type OperatingPoint = "enhanced" | "standard"
 
@@ -18,13 +21,14 @@ export const apiGetOSSToken = async () => {
 }
 
 
-export const apiCommitSpeechmaticsTask = ({ operatingPoint, fileUrl, language }: {
+export const apiCommitSpeechmaticsTask = async ({ operatingPoint, fileUrl, language }: {
   operatingPoint: OperatingPoint
   fileUrl: string
   language: string
 }) => {
   const url = `${PREFIX_URL}/stt/speechmatics`
-  return fetch(url, {
+  const finLangCode = LANGUAGE_OPTIONS.find(item => item.value == language)?.code
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -32,9 +36,15 @@ export const apiCommitSpeechmaticsTask = ({ operatingPoint, fileUrl, language }:
     body: JSON.stringify({
       operatingPoint,
       fileUrl,
-      language
+      language: finLangCode
     })
   })
+  const res = await response.json()
+  if (res.code != 200) {
+    message.error(res.message)
+    throw new Error(res.message)
+  }
+  return res.data
 }
 
 
@@ -59,17 +69,17 @@ export const apiDownloadSpeechmaticsTask = async (jobId: string) => {
       'Content-Type': 'application/json',
     }
   })
-  const res = await response.json()
-  return res.data
+  const text = await response.text();
+  return text
 }
 
 
-export const apiCommitAzureTask = ({ locale, fileUrl }: {
+export const apiCommitAzureTask = async ({ locale, fileUrl }: {
   fileUrl: string
   locale: string
 }) => {
   const url = `${PREFIX_URL}/stt/azure`
-  return fetch(url, {
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -79,6 +89,12 @@ export const apiCommitAzureTask = ({ locale, fileUrl }: {
       locale
     })
   })
+  const res = await response.json()
+  if (res.code != 200) {
+    message.error(res.message)
+    throw new Error(res.message)
+  }
+  return res.data
 }
 
 
@@ -103,8 +119,8 @@ export const apiDownloadAzureTask = async (jobId: string) => {
       'Content-Type': 'application/json',
     }
   })
-  const res = await response.json()
-  return res.data
+  const text = await response.text();
+  return text
 }
 
 

@@ -58,8 +58,7 @@ export const uploadFile = async (file: File) => {
     const fileUrl = `https://${globalBucketName}.s3.${globalRegion}.amazonaws.com/${fileKey}`;
     console.log('文件url', fileUrl);
 
-    message.success(`${file.name} 上传成功`);
-    return response;
+    return fileUrl;
   } catch (err) {
     message.error(`${file.name} 上传失败`);
     console.error('上传文件时出错', err);
@@ -82,23 +81,47 @@ export const getCurrentDate = () => {
 }
 
 
-export const languageToEngineList = async (lang: string): Promise<Engine[]> => {
+export const langToEngineList = async (lang: string): Promise<Engine[]> => {
   if (lang == "auto") {
     const data = await apiGetAutoLanguages()
     console.log('data', data);
     return []
-  } else if (lang == "en-US" || lang == "ko-KR" || lang == "zh-CN" || lang == "es-ES" || lang == "fr-FR" || lang == "it-IT" || lang == "pt-PT") {
+  } else if (lang == "en-US" || lang == "ko-KR" || lang == "zh-CN" || lang == "es-ES"
+    || lang == "fr-FR" || lang == "it-IT" || lang == "pt-PT") {
     return [
       Engine.SuntownEnhance,
       Engine.SuntownStandard,
       Engine.Azure,
-      Engine.Sonix
+      // Engine.Sonix
+    ]
+  } else {
+    return [
+      Engine.SuntownEnhance,
+      Engine.SuntownStandard,
+      Engine.Azure,
     ]
   }
 
-  // else if () {
-
-  // }
-
   return []
+}
+
+
+export const downloadText = async (content: string, fileName: string = "file.txt"): Promise<void> => {
+  // 创建一个 Blob 对象
+  const blob = new Blob([content], { type: 'text/plain' });
+
+  // 创建一个下载链接
+  const downloadLink = document.createElement('a');
+  downloadLink.href = URL.createObjectURL(blob);
+  downloadLink.download = fileName;
+
+  // 触发下载
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+
+  // 释放 URL 对象
+  URL.revokeObjectURL(downloadLink.href);
+
+  // 移除下载链接
+  document.body.removeChild(downloadLink);
 }

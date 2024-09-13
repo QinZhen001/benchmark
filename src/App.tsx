@@ -1,34 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// import { useState } from 'react'
+import { State } from './types'
+import Upload from "./components/upload"
+import Select from "./components/select"
+import Result from "./components/result"
+
+import './index.css'
+import { useAppSelector } from './common'
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const state = useAppSelector(state => state.global.state)
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='center-wrapper'>
+      <section className='text-wrapper'>
+        <div className='top-text'>Agora Demo</div>
+        <div className='bottom-text'>Offline Speech-To-Text</div>
+      </section>
+      {state === State.Uploading ? <Upload></Upload> : null}
+      {state === State.Selecting ? <Select></Select> : null}
+      {state === State.Transcribing ? <Result></Result> : null}
+    </div >
   )
 }
 

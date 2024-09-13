@@ -1,0 +1,28 @@
+export const LANGUAGE_OPTIONS = [
+  { label: "Auto", value: "auto" },
+  { label: "Tamil", value: "ta-IN" },
+  { label: "Dutch", value: "nl-NL" },
+  { label: "Thai", value: "th-TH" },
+  { label: "Vietnamese", value: "vi-VN" },
+  { label: "Turkish", value: "tr-TR" },
+  { label: "Russian", value: "ru-RU" },
+  { label: "Malay", value: "ms-MY" },
+  { label: "Chinese(HK)", value: "zh-HK" },
+  { label: "Indonesian", value: "id-ID" },
+  { label: "Arabic(JO)", value: "ar-JO" },
+  { label: "Arabic(EG)", value: "ar-EG" },
+  { label: "Arabic(SA)", value: "ar-SA" },
+  { label: "Arabic(UAE)", value: "ar-AE" },
+  { label: "English(US) 	", value: "en-US" },
+  { label: "Hindi", value: "hi-IN" },
+  { label: "Korean", value: "ko-KR" },
+  { label: "Japanese", value: "ja-JP" },
+  { label: "German", value: "de-DE" },
+  { label: "Spanish", value: "es-ES" },
+  { label: "French", value: "fr-FR" },
+  { label: "Italian", value: "it-IT" },
+  { label: "Chinese", value: "zh-CN" },
+  { label: "Portuguese", value: "pt-PT" },
+].sort((a, b) => {
+  return a.label.localeCompare(b.label)
+})

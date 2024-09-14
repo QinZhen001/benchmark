@@ -39,7 +39,7 @@ const MyUpload = () => {
     name: 'file',
     maxCount: 1,
     multiple: false,
-    accept: ".mp3,.wav,.flac,.aac,.pcm,.ogg,.arm,.asf",
+    accept: ".mp3,.wav,.flac,.aac,.pcm,.ogg,.amr,.asf",
     customRequest: async ({ file, onSuccess, onError }: any) => {
       try {
         beforeUpload(file);

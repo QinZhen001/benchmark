@@ -156,19 +156,19 @@ const Result = () => {
       case Engine.SuntownEnhance:
         if (item.jobId) {
           data = await apiDownloadSpeechmaticsTask(item.jobId)
-          downloadText(data, `${fileName}_enhanced.txt`)
+          downloadText(data, `${fileName}_result.txt`)
         }
         break;
       case Engine.SuntownStandard:
         if (item.jobId) {
           data = await apiDownloadSpeechmaticsTask(item.jobId)
-          downloadText(data, `${fileName}_standard.txt`)
+          downloadText(data, `${fileName}_result.txt`)
         }
         break;
       case Engine.Azure:
         if (item.jobId) {
           data = await apiDownloadAzureTask(item.jobId)
-          downloadText(data, `${fileName}_azure.txt`)
+          downloadText(data, `${fileName}_result.txt`)
         }
         break;
       case Engine.Sonix:
@@ -252,7 +252,7 @@ const Result = () => {
     {
       resultList.map((item, index) => {
         return <div key={index} className="result-item">
-          <div className="result-top-engine result-item-engine">{item.engineName}</div>
+          <div className="result-top-engine result-item-engine">{`Engine ${index + 1}`}</div>
           <div className="result-top-status result-item-status">{item.status}
             {item.status == "Running" ? <Spin size="small" style={{
               marginLeft: "8px"

@@ -22,7 +22,7 @@ const MySelect = () => {
 
   const onClickNext = () => {
     if (!language) {
-      message.error("Please select a language")
+      return message.error("Please select a language")
     }
     dispatch(setState(State.Transcribing))
   }

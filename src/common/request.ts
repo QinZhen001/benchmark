@@ -27,7 +27,12 @@ export const apiCommitSpeechmaticsTask = async ({ operatingPoint, fileUrl, langu
   language: string
 }) => {
   const url = `${PREFIX_URL}/stt/speechmatics`
-  const finLangCode = LANGUAGE_OPTIONS.find(item => item.value == language)?.code
+  let finLangCode = ""
+  if (language == "auto") {
+    finLangCode = language
+  } else {
+    finLangCode = LANGUAGE_OPTIONS.find(item => item.value == language)?.code ?? ""
+  }
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -124,14 +129,14 @@ export const apiDownloadAzureTask = async (jobId: string) => {
 }
 
 
-export const apiGetAutoLanguages = async () => {
-  const url = `${PREFIX_URL}/stt/speechmatics/discovery/features`
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  })
-  const res = await response.json()
-  return res.data
-}
+// export const apiGetAutoLanguages = async () => {
+//   const url = `${PREFIX_URL}/stt/speechmatics/discovery/features`
+//   const response = await fetch(url, {
+//     method: 'GET',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     }
+//   })
+//   const res = await response.json()
+//   return res.data
+// }

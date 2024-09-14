@@ -1,5 +1,7 @@
+// https://confluence.agoralab.co/pages/viewpage.action?spaceKey=PM&title=Multi-Language+List
+
 export const LANGUAGE_OPTIONS = [
-  { label: "Auto", value: "auto" },
+  // { label: "Auto", value: "auto" },
   { label: "Tamil", value: "ta-IN", code: "ta" },
   { label: "Dutch", value: "nl-NL", code: "nl" },
   { label: "Thai", value: "th-TH", code: "th" },
@@ -7,7 +9,7 @@ export const LANGUAGE_OPTIONS = [
   { label: "Turkish", value: "tr-TR", code: "tr" },
   { label: "Russian", value: "ru-RU", code: "ru" },
   { label: "Malay", value: "ms-MY", code: "ms" },
-  { label: "Chinese(HK)", value: "zh-HK", code: "zh" },
+  { label: "Chinese(HK)", value: "zh-HK", code: "yue" },
   { label: "Indonesian", value: "id-ID", code: "id" },
   { label: "Arabic(JO)", value: "ar-JO", code: "ar" },
   { label: "Arabic(EG)", value: "ar-EG", code: "ar" },
@@ -21,7 +23,7 @@ export const LANGUAGE_OPTIONS = [
   { label: "Spanish", value: "es-ES", code: "es" },
   { label: "French", value: "fr-FR", code: "fr" },
   { label: "Italian", value: "it-IT", code: "it" },
-  { label: "Chinese", value: "zh-CN", code: "zh" },
+  { label: "Chinese", value: "zh-CN", code: "cmn" },
   { label: "Portuguese", value: "pt-PT", code: "pt" },
 ].sort((a, b) => {
   return a.label.localeCompare(b.label)

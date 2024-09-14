@@ -2,7 +2,7 @@ import { apiGetOSSToken } from "./request"
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { message } from 'antd'
 import { Engine } from "../types";
-import { apiGetAutoLanguages } from "./request";
+// import { apiGetAutoLanguages } from "./request";
 // import CryptoJSMd5 from 'crypto-js/md5';
 
 let s3Client: any
@@ -83,9 +83,9 @@ export const getCurrentDate = () => {
 
 export const langToEngineList = async (lang: string): Promise<Engine[]> => {
   if (lang == "auto") {
-    const data = await apiGetAutoLanguages()
-    console.log('data', data);
-    return []
+    return [
+      // Engine.SuntownEnhance
+    ]
   } else if (lang == "en-US" || lang == "ko-KR" || lang == "zh-CN" || lang == "es-ES"
     || lang == "fr-FR" || lang == "it-IT" || lang == "pt-PT") {
     return [
@@ -101,8 +101,7 @@ export const langToEngineList = async (lang: string): Promise<Engine[]> => {
       Engine.Azure,
     ]
   }
-
-  return []
+  // return []
 }
 
 

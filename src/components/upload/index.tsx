@@ -22,8 +22,6 @@ const beforeUpload = (file: File) => {
 }
 
 
-
-
 const MyUpload = () => {
   const state = useAppSelector((state) => state.global.state)
   const fileName = useAppSelector((state) => state.global.fileName)

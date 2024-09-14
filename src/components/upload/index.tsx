@@ -5,7 +5,7 @@ import { uploadFile, useAppDispatch, useAppSelector } from '../../common'
 import { setFileName, setState, setFileUrl } from '../../store/reducers/global'
 
 import './index.css';
-import { State } from '/src/types';
+import { State } from '../../types';
 
 const { Dragger } = Upload;
 

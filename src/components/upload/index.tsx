@@ -73,13 +73,13 @@ const MyUpload = () => {
       <p className="ant-upload-drag-icon">
         <InboxOutlined />
       </p>
-      <p className="ant-upload-text">点击上传 或将文件拖拽到此处</p>
+      <p className="ant-upload-text">Click to upload or drag the file here</p>
       <p className="ant-upload-hint">
-        支持格式：mp3,wav,flac,aac,pcm,ogg,arm,asf (最大不得超过 300M)
+        Supported formats: mp3,wav,flac,aac,pcm,ogg,arm,asf (The size must not exceed 300MB)
       </p>
     </Dragger>
     {fileName ? <div className='upload-button-wrapper'>
-      <div className='next-button' onClick={onClickNext}>下一步</div>
+      <div className='next-button' onClick={onClickNext}>Next step</div>
     </div> : null}
   </div>
 }

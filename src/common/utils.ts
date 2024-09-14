@@ -2,8 +2,6 @@ import { apiGetOSSToken } from "./request"
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { message } from 'antd'
 import { Engine } from "../types";
-// import { apiGetAutoLanguages } from "./request";
-// import CryptoJSMd5 from 'crypto-js/md5';
 
 let s3Client: any
 let globalBucketName: string = ""
@@ -60,8 +58,8 @@ export const uploadFile = async (file: File) => {
 
     return fileUrl;
   } catch (err) {
-    message.error(`${file.name} 上传失败`);
-    console.error('上传文件时出错', err);
+    message.error(`${file.name} upload failed`);
+    console.error('upload failed', err);
   }
 }
 

@@ -267,8 +267,8 @@ const Result = () => {
       Status: Loading file to STT engine(other statuss:Language Detecting,Transcribing,Done)
     </div>
     <div className="my-select-button">
-      <div className="my-select-button-left" onClick={onClickPrev}>上一步</div>
-      <div className="my-select-button-right" onClick={onClickInit}>重新执行</div>
+      <div className="my-select-button-left" onClick={onClickPrev}>Previous Step</div>
+      <div className="my-select-button-right" onClick={onClickInit}>Execute Again</div>
     </div>
   </div>
 }

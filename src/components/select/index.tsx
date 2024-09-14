@@ -35,7 +35,7 @@ const MySelect = () => {
     <div className="my-select-top-text">
       {`${currentDate.year}-${currentDate.month}-${currentDate.day}`}
       <span className="my-select-top-text-filename">{fileName}，</span>
-      <span className="my-select-top-text-success">上传成功</span>
+      <span className="my-select-top-text-success">upload successful</span>
     </div>
     <div className="my-select-center">
       <div className="my-select-center-text">
@@ -49,8 +49,8 @@ const MySelect = () => {
       </div>
     </div>
     <div className="my-select-button">
-      <div className="my-select-button-left" onClick={onClickPrev}>上一步</div>
-      <div className="my-select-button-right" onClick={onClickNext}>下一步</div>
+      <div className="my-select-button-left" onClick={onClickPrev}>Previous Step</div>
+      <div className="my-select-button-right" onClick={onClickNext}>Next Step</div>
     </div>
   </div>
 }

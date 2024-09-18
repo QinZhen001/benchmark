@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react'
 import { name } from "./package.json"
 
 const genBaseUrl = (mode: string) => {
-  if (mode == "production") {
-    return `/${name}/`
-  }
+  // if (mode == "production") {
+  //   return `/${name}/`
+  // }
   return "/"
 }
 

@@ -147,7 +147,7 @@ const Result = () => {
   }
 
 
-  const onClickItem = async (item: IResult) => {
+  const onClickItem = async (item: IResult, index: number) => {
     if (item.status !== "Succeeded") {
       return
     }
@@ -156,19 +156,19 @@ const Result = () => {
       case Engine.SuntownEnhance:
         if (item.jobId) {
           data = await apiDownloadSpeechmaticsTask(item.jobId)
-          downloadText(data, `${fileName}_result.txt`)
+          downloadText(data, `${fileName}_engine${index + 1}.txt`)
         }
         break;
       case Engine.SuntownStandard:
         if (item.jobId) {
           data = await apiDownloadSpeechmaticsTask(item.jobId)
-          downloadText(data, `${fileName}_result.txt`)
+          downloadText(data, `${fileName}_engine${index + 1}.txt`)
         }
         break;
       case Engine.Azure:
         if (item.jobId) {
           data = await apiDownloadAzureTask(item.jobId)
-          downloadText(data, `${fileName}_result.txt`)
+          downloadText(data, `${fileName}_engine${index + 1}.txt`)
         }
         break;
       case Engine.Sonix:
@@ -259,7 +259,7 @@ const Result = () => {
             }}></Spin> : null}
           </div>
           <div className="result-top-duration result-item-duration">{getTaskDuration(item)}</div>
-          <div className={`result-top-transcription result-item-btn ${item.status !== 'Succeeded' ? 'result-item-btn__disable' : ''}`} onClick={() => onClickItem(item)}>Download</div>
+          <div className={`result-top-transcription result-item-btn ${item.status !== 'Succeeded' ? 'result-item-btn__disable' : ''}`} onClick={() => onClickItem(item, index)}>Download</div>
         </div>
       })
     }

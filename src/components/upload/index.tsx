@@ -40,6 +40,7 @@ const MyUpload = () => {
     maxCount: 1,
     multiple: false,
     accept: ".mp3,.wav,.flac,.aac,.pcm,.ogg,.amr,.asf",
+    // directory: true, // 当网站部署时
     customRequest: async ({ file, onSuccess, onError }: any) => {
       try {
         beforeUpload(file);

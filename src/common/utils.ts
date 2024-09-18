@@ -45,7 +45,7 @@ export const uploadFile = async (file: File) => {
       await initS3Client()
     }
 
-    const fileKey = `${file.name}`; // 生成唯一的文件名
+    const fileKey = `benchmark-demo/${file.name}`; // 生成唯一的文件名
     const uploadParams = {
       Bucket: globalBucketName, // 你的 S3 存储桶名称
       Key: fileKey, // 上传到 S3 的文件键（名称）

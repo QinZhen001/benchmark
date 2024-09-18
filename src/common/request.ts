@@ -26,7 +26,7 @@ export const apiCommitSpeechmaticsTask = async ({ operatingPoint, fileUrl, langu
   fileUrl: string
   language: string
 }) => {
-  const url = `${PREFIX_URL}/stt/speechmatics`
+  const url = `${PREFIX_URL}/stt/engine2`
   let finLangCode = ""
   if (language == "auto") {
     finLangCode = language
@@ -54,7 +54,7 @@ export const apiCommitSpeechmaticsTask = async ({ operatingPoint, fileUrl, langu
 
 
 export const apiGetSpeechmaticsTaskStatus = async (jobId: string) => {
-  const url = `${PREFIX_URL}/stt/speechmatics/${jobId}`
+  const url = `${PREFIX_URL}/stt/engine2/${jobId}`
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -67,7 +67,7 @@ export const apiGetSpeechmaticsTaskStatus = async (jobId: string) => {
 
 
 export const apiDownloadSpeechmaticsTask = async (jobId: string) => {
-  const url = `${PREFIX_URL}/stt/speechmatics/${jobId}/file`
+  const url = `${PREFIX_URL}/stt/engine2/${jobId}/file`
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -83,7 +83,7 @@ export const apiCommitAzureTask = async ({ locale, fileUrl }: {
   fileUrl: string
   locale: string
 }) => {
-  const url = `${PREFIX_URL}/stt/azure`
+  const url = `${PREFIX_URL}/stt/engine1`
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -104,7 +104,7 @@ export const apiCommitAzureTask = async ({ locale, fileUrl }: {
 
 
 export const apiGetAzureTaskStatus = async (jobId: string) => {
-  const url = `${PREFIX_URL}/stt/azure/${jobId}`
+  const url = `${PREFIX_URL}/stt/engine1/${jobId}`
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -117,7 +117,7 @@ export const apiGetAzureTaskStatus = async (jobId: string) => {
 
 
 export const apiDownloadAzureTask = async (jobId: string) => {
-  const url = `${PREFIX_URL}/stt/azure/${jobId}/file`
+  const url = `${PREFIX_URL}/stt/engine1/${jobId}/file`
   const response = await fetch(url, {
     method: 'GET',
     headers: {

@@ -1,8 +1,6 @@
 // import { useState } from 'react'
 import { State } from './types'
 import Upload from "./components/upload"
-import Select from "./components/select"
-import Result from "./components/result"
 
 import './index.css'
 import { useAppSelector } from './common'
@@ -20,8 +18,6 @@ function App() {
         <div className='bottom-text'>Offline Speech-To-Text</div>
       </section>
       {state === State.Uploading ? <Upload></Upload> : null}
-      {state === State.Selecting ? <Select></Select> : null}
-      {state === State.Transcribing ? <Result></Result> : null}
     </div >
   )
 }

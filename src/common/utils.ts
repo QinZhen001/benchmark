@@ -1,7 +1,6 @@
 import { apiGetOSSToken } from "./request"
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { message } from 'antd'
-import { Engine } from "../types";
 
 let s3Client: any
 let globalBucketName: string = ""
@@ -39,23 +38,19 @@ export const initS3Client = async () => {
 }
 
 
-export const uploadFile = async (file: File) => {
+export const uploadFile = async (file: File, fileName: string) => {
   try {
     if (!s3Client) {
       await initS3Client()
     }
-    const fileKey = `${Date.now()}_${file.name}`; // 生成唯一的文件名
     const uploadParams = {
       Bucket: globalBucketName, // 你的 S3 存储桶名称
-      Key: fileKey, // 上传到 S3 的文件键（名称）
+      Key: fileName, // 上传到 S3 的文件键（名称）
       Body: file, // 文件内容
     };
     const command = new PutObjectCommand(uploadParams);
     const response = await s3Client.send(command);
-
-    const fileUrl = `https://${globalBucketName}.s3.${globalRegion}.amazonaws.com/${fileKey}`;
-    console.log('文件url', fileUrl);
-
+    const fileUrl = `https://${globalBucketName}.s3.${globalRegion}.amazonaws.com/${fileName}`;
     return fileUrl;
   } catch (err) {
     message.error(`${file.name} upload failed`);
@@ -79,28 +74,28 @@ export const getCurrentDate = () => {
 }
 
 
-export const langToEngineList = async (lang: string): Promise<Engine[]> => {
-  if (lang == "auto") {
-    return [
-      // Engine.SuntownEnhance
-    ]
-  } else if (lang == "en-US" || lang == "ko-KR" || lang == "zh-CN" || lang == "es-ES"
-    || lang == "fr-FR" || lang == "it-IT" || lang == "pt-PT") {
-    return [
-      Engine.SuntownEnhance,
-      Engine.SuntownStandard,
-      Engine.Azure,
-      // Engine.Sonix
-    ]
-  } else {
-    return [
-      Engine.SuntownEnhance,
-      Engine.SuntownStandard,
-      Engine.Azure,
-    ]
-  }
-  // return []
-}
+// export const langToEngineList = async (lang: string): Promise<Engine[]> => {
+//   if (lang == "auto") {
+//     return [
+//       // Engine.SuntownEnhance
+//     ]
+//   } else if (lang == "en-US" || lang == "ko-KR" || lang == "zh-CN" || lang == "es-ES"
+//     || lang == "fr-FR" || lang == "it-IT" || lang == "pt-PT") {
+//     return [
+//       Engine.SuntownEnhance,
+//       Engine.SuntownStandard,
+//       Engine.Azure,
+//       // Engine.Sonix
+//     ]
+//   } else {
+//     return [
+//       Engine.SuntownEnhance,
+//       Engine.SuntownStandard,
+//       Engine.Azure,
+//     ]
+//   }
+//   // return []
+// }
 
 
 export const downloadText = async (content: string, fileName: string = "file.txt"): Promise<void> => {
@@ -122,3 +117,28 @@ export const downloadText = async (content: string, fileName: string = "file.txt
   // 移除下载链接
   document.body.removeChild(downloadLink);
 }
+
+
+// seconds 秒
+export const formatTime = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  const hoursStr = hours > 0 ? hours + "h" : "";
+  const minutesStr = minutes > 0 ? minutes + "m" : "";
+  const secondsStr = secs > 0 ? secs + "s" : "";
+
+  return hoursStr + minutesStr + secondsStr;
+}
+
+
+export const getFileExtension = (file: File) => {
+  // 获取文件名
+  const fileName = file.name;
+  // 获取文件名最后一个点（.）后面的字符串
+  const fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+  // 返回文件后缀名
+  return fileExtension;
+}
+

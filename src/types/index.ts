@@ -8,12 +8,12 @@ export enum State {
 }
 
 
-export enum Engine {
-  SuntownEnhance = "SuntownEnhance",
-  SuntownStandard = "SuntownStandard",
-  Azure = "Azure",
-  Sonix = "Sonix"
-}
+// export enum Engine {
+//   SuntownEnhance = "SuntownEnhance",
+//   SuntownStandard = "SuntownStandard",
+//   Azure = "Azure",
+//   Sonix = "Sonix"
+// }
 
 
 export interface IResult {

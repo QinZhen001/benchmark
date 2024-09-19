@@ -1,11 +1,13 @@
 import { InboxOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { message, Upload } from 'antd';
-import { uploadFile, useAppDispatch, useAppSelector } from '../../common'
+import { uploadFile, useAppDispatch, useAppSelector, getFileExtension } from '../../common'
 import { setFileName, setState, setFileUrl } from '../../store/reducers/global'
+import { State } from '../../types';
+import CryptoJS from 'crypto-js'
+
 
 import './index.css';
-import { State } from '../../types';
 
 const { Dragger } = Upload;
 
@@ -44,7 +46,8 @@ const MyUpload = () => {
     customRequest: async ({ file, onSuccess, onError }: any) => {
       try {
         beforeUpload(file);
-        const response = await uploadFile(file);
+        const finFileName = CryptoJS.MD5(`${Date.now()}_${file.name}`).toString() + "." + getFileExtension(file); // 生成唯一的文件名
+        const response = await uploadFile(file, finFileName);
         onSuccess(response, file);
       } catch (err) {
         onError(err);
@@ -57,8 +60,13 @@ const MyUpload = () => {
       }
       if (status === 'done') {
         console.log("done", info)
-        dispatch(setFileUrl(info.file.response))
-        dispatch(setFileName(info.file.name))
+        const fileUrl = info.file.response
+        const fileName = info.file.name
+        dispatch(setFileUrl(fileUrl))
+        dispatch(setFileName(fileName))
+        console.log("---------------------------------------")
+        console.log(`fileName:${fileName}, fileUrl:${fileUrl}`,)
+        console.log("---------------------------------------")
         message.success(`${info.file.name} file uploaded successfully.`);
       } else if (status === 'error') {
         message.error(`${info.file.name} file upload failed.`);

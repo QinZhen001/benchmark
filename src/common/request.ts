@@ -21,8 +21,67 @@ export const apiGetOSSToken = async () => {
 }
 
 
-export const apiCommitSpeechmaticsTask = async ({ operatingPoint, fileUrl, language }: {
-  operatingPoint: OperatingPoint
+// ----------- engine1 -----------------
+export const apiCommitEngine1Task = async ({ fileUrl, language }: {
+  fileUrl: string
+  language: string
+}) => {
+  const url = `${PREFIX_URL}/stt/engine1`
+  let finLangCode = ""
+  if (language == "auto") {
+    finLangCode = language
+  } else {
+    finLangCode = LANGUAGE_OPTIONS.find(item => item.value == language)?.code ?? ""
+  }
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      operatingPoint: "enhanced",
+      fileUrl,
+      language: finLangCode
+    })
+  })
+  const res = await response.json()
+  if (res.code != 200) {
+    message.error(res.message)
+    throw new Error(res.message)
+  }
+  return res.data
+}
+
+
+export const apiGetEngine1TaskStatus = async (jobId: string) => {
+  const url = `${PREFIX_URL}/stt/engine1/${jobId}`
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  const res = await response.json()
+  return res.data
+}
+
+
+export const apiDownloadEngine1Task = async (jobId: string) => {
+  const url = `${PREFIX_URL}/stt/engine1/${jobId}/file`
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  const text = await response.text();
+  return text
+}
+
+
+// ----------- engine2 -----------------
+
+export const apiCommitEngine2Task = async ({ fileUrl, language }: {
   fileUrl: string
   language: string
 }) => {
@@ -39,7 +98,7 @@ export const apiCommitSpeechmaticsTask = async ({ operatingPoint, fileUrl, langu
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      operatingPoint,
+      operatingPoint: "standard",
       fileUrl,
       language: finLangCode
     })
@@ -53,7 +112,7 @@ export const apiCommitSpeechmaticsTask = async ({ operatingPoint, fileUrl, langu
 }
 
 
-export const apiGetSpeechmaticsTaskStatus = async (jobId: string) => {
+export const apiGetEngine2TaskStatus = async (jobId: string) => {
   const url = `${PREFIX_URL}/stt/engine2/${jobId}`
   const response = await fetch(url, {
     method: 'GET',
@@ -66,7 +125,7 @@ export const apiGetSpeechmaticsTaskStatus = async (jobId: string) => {
 }
 
 
-export const apiDownloadSpeechmaticsTask = async (jobId: string) => {
+export const apiDownloadEngine2Task = async (jobId: string) => {
   const url = `${PREFIX_URL}/stt/engine2/${jobId}/file`
   const response = await fetch(url, {
     method: 'GET',
@@ -79,11 +138,12 @@ export const apiDownloadSpeechmaticsTask = async (jobId: string) => {
 }
 
 
-export const apiCommitAzureTask = async ({ locale, fileUrl }: {
+// ----------- engine3 -----------------
+export const apiCommitEngine3Task = async ({ language, fileUrl }: {
   fileUrl: string
-  locale: string
+  language: string
 }) => {
-  const url = `${PREFIX_URL}/stt/engine1`
+  const url = `${PREFIX_URL}/stt/engine3`
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -91,7 +151,7 @@ export const apiCommitAzureTask = async ({ locale, fileUrl }: {
     },
     body: JSON.stringify({
       fileUrl,
-      locale
+      locale: language
     })
   })
   const res = await response.json()
@@ -103,8 +163,8 @@ export const apiCommitAzureTask = async ({ locale, fileUrl }: {
 }
 
 
-export const apiGetAzureTaskStatus = async (jobId: string) => {
-  const url = `${PREFIX_URL}/stt/engine1/${jobId}`
+export const apiGetEngine3TaskStatus = async (jobId: string) => {
+  const url = `${PREFIX_URL}/stt/engine3/${jobId}`
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -116,8 +176,8 @@ export const apiGetAzureTaskStatus = async (jobId: string) => {
 }
 
 
-export const apiDownloadAzureTask = async (jobId: string) => {
-  const url = `${PREFIX_URL}/stt/engine1/${jobId}/file`
+export const apiDownloadEngine3Task = async (jobId: string) => {
+  const url = `${PREFIX_URL}/stt/engine3/${jobId}/file`
   const response = await fetch(url, {
     method: 'GET',
     headers: {

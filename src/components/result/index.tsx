@@ -1,13 +1,20 @@
 import { useState, useMemo, useEffect } from "react";
 import {
   getCurrentDate, useAppSelector, LANGUAGE_OPTIONS,
-  useAppDispatch, langToEngineList, apiCommitSpeechmaticsTask,
-  apiCommitAzureTask, apiGetSpeechmaticsTaskStatus,
-  apiGetAzureTaskStatus, apiDownloadAzureTask, apiDownloadSpeechmaticsTask,
-  downloadText
+  useAppDispatch,
+  downloadText, formatTime,
+  apiCommitEngine1Task,
+  apiCommitEngine2Task,
+  apiCommitEngine3Task,
+  apiDownloadEngine1Task,
+  apiDownloadEngine2Task,
+  apiDownloadEngine3Task,
+  apiGetEngine1TaskStatus,
+  apiGetEngine2TaskStatus,
+  apiGetEngine3TaskStatus,
 } from "../../common";
 import { setState, reset } from "../../store/reducers/global";
-import { Engine, IResult, State, TransformStatus } from "../../types"
+import { IResult, State, TransformStatus } from "../../types"
 import { Spin, message } from 'antd';
 
 import "./index.css"
@@ -22,7 +29,23 @@ const getTaskDuration = (result: IResult) => {
   if (result.endTime < result.startTime) {
     return "-"
   }
-  return Math.floor((result.endTime - result.startTime) / 1000) + "s"
+  return formatTime(Math.floor((result.endTime - result.startTime) / 1000))
+}
+
+const getInitResultList = (): IResult[] => {
+  return [{
+    engineName: "Engine 1",
+    status: "Running",
+    startTime: Date.now(),
+  }, {
+    engineName: "Engine 2",
+    status: "Running",
+    startTime: Date.now(),
+  }, {
+    engineName: "Engine 3",
+    status: "Running",
+    startTime: Date.now(),
+  }]
 }
 
 const Result = () => {
@@ -72,57 +95,39 @@ const Result = () => {
   }, [needSchedule, resultList])
 
   const initResultList = async () => {
-    const engineList = await langToEngineList(language)
-    const resultList = engineList.map((engine) => {
-      return {
-        engineName: engine,
-        status: "Running",
-        duration: 0,
-        startTime: Date.now(),
-      } as IResult
+    const list = getInitResultList()
+    setResultList(getInitResultList())
+    const jobIds: string[] = []
+    for (let i = 0; i < list.length; i++) {
+      const data = {
+        fileUrl,
+        language
+      }
+      const res = await commitTask(i + 1, data)
+      if (res.jobId) {
+        jobIds[i] = res.jobId
+      }
+    }
+    setResultList((list) => {
+      return list.map((item, index) => {
+        return {
+          ...item,
+          jobId: jobIds[index]
+        }
+      })
     })
-    setResultList(resultList)
-    await startTaskList(engineList)
   }
 
-  const startTaskList = async (engineList: Engine[]) => {
-    engineList.forEach(async (engine) => {
-      let data: any = null
-      switch (engine) {
-        case Engine.SuntownEnhance:
-          data = await apiCommitSpeechmaticsTask({
-            operatingPoint: "enhanced",
-            fileUrl: fileUrl,
-            language: language
-          })
-          if (data.jobId) {
-            updateResultItem(Engine.SuntownEnhance, { jobId: data.jobId })
-          }
-          break;
-        case Engine.SuntownStandard:
-          data = await apiCommitSpeechmaticsTask({
-            operatingPoint: "standard",
-            fileUrl: fileUrl,
-            language: language
-          })
-          if (data.jobId) {
-            updateResultItem(Engine.SuntownStandard, { jobId: data.jobId })
-          }
-          break;
-        case Engine.Azure:
-          data = await apiCommitAzureTask({
-            fileUrl: fileUrl,
-            locale: language
-          })
-          if (data.jobId) {
-            updateResultItem(Engine.Azure, { jobId: data.jobId })
-          }
-          break;
-        case Engine.Sonix:
-          break;
-      }
-    })
+  const commitTask = async (index: number, data: any) => {
+    if (index == 1) {
+      return await apiCommitEngine1Task(data)
+    } else if (index == 2) {
+      return await apiCommitEngine2Task(data)
+    } else if (index == 3) {
+      return await apiCommitEngine3Task(data)
+    }
   }
+
 
   const updateResultItem = (engineName: string, data: Partial<IResult>) => {
     setResultList((list) => {
@@ -147,31 +152,29 @@ const Result = () => {
   }
 
 
-  const onClickItem = async (item: IResult, index: number) => {
+  const onClickItem = async (item: IResult) => {
     if (item.status !== "Succeeded") {
       return
     }
     let data = null
     switch (item.engineName) {
-      case Engine.SuntownEnhance:
+      case "Engine 1":
         if (item.jobId) {
-          data = await apiDownloadSpeechmaticsTask(item.jobId)
-          downloadText(data, `${fileName}_engine${index + 1}.txt`)
+          data = await apiDownloadEngine1Task(item.jobId)
+          downloadText(data, `${fileName}_engine1_${item.jobId}.txt`)
         }
         break;
-      case Engine.SuntownStandard:
+      case "Engine 2":
         if (item.jobId) {
-          data = await apiDownloadSpeechmaticsTask(item.jobId)
-          downloadText(data, `${fileName}_engine${index + 1}.txt`)
+          data = await apiDownloadEngine2Task(item.jobId)
+          downloadText(data, `${fileName}_engine2_${item.jobId}.txt`)
         }
         break;
-      case Engine.Azure:
+      case "Engine 3":
         if (item.jobId) {
-          data = await apiDownloadAzureTask(item.jobId)
-          downloadText(data, `${fileName}_engine${index + 1}.txt`)
+          data = await apiDownloadEngine3Task(item.jobId)
+          downloadText(data, `${fileName}_engine3_${item.jobId}.txt`)
         }
-        break;
-      case Engine.Sonix:
         break;
     }
   }
@@ -187,43 +190,41 @@ const Result = () => {
       resultList.forEach(async item => {
         const time = Date.now()
         switch (item.engineName) {
-          case Engine.SuntownEnhance:
+          case "Engine 1":
             if (item.jobId && item.status === "Running") {
-              data = await apiGetSpeechmaticsTaskStatus(item.jobId)
+              data = await apiGetEngine1TaskStatus(item.jobId)
               const status = data.status
               if (status) {
-                updateResultItem(Engine.SuntownEnhance, {
+                updateResultItem("Engine 1", {
                   status: status,
                   endTime: status != "Running" ? time : undefined
                 })
               }
             }
             break;
-          case Engine.SuntownStandard:
+          case "Engine 2":
             if (item.jobId && item.status === "Running") {
-              data = await apiGetSpeechmaticsTaskStatus(item.jobId)
+              data = await apiGetEngine2TaskStatus(item.jobId)
               const status = data.status
               if (status) {
-                updateResultItem(Engine.SuntownStandard, {
+                updateResultItem("Engine 2", {
                   status: status,
                   endTime: status != "Running" ? time : undefined
                 })
               }
             }
             break;
-          case Engine.Azure:
+          case "Engine 3":
             if (item.jobId && item.status === "Running") {
-              data = await apiGetAzureTaskStatus(item.jobId)
+              data = await apiGetEngine3TaskStatus(item.jobId)
               const status = data.status
               if (status) {
-                updateResultItem(Engine.Azure, {
+                updateResultItem("Engine 3", {
                   status: status,
                   endTime: status != "Running" ? time : undefined
                 })
               }
             }
-            break;
-          case Engine.Sonix:
             break;
         }
       })
@@ -252,14 +253,14 @@ const Result = () => {
     {
       resultList.map((item, index) => {
         return <div key={index} className="result-item">
-          <div className="result-top-engine result-item-engine">{`Engine ${index + 1}`}</div>
+          <div className="result-top-engine result-item-engine">{item.engineName}</div>
           <div className="result-top-status result-item-status">{item.status}
             {item.status == "Running" ? <Spin size="small" style={{
               marginLeft: "8px"
             }}></Spin> : null}
           </div>
           <div className="result-top-duration result-item-duration">{getTaskDuration(item)}</div>
-          <div className={`result-top-transcription result-item-btn ${item.status !== 'Succeeded' ? 'result-item-btn__disable' : ''}`} onClick={() => onClickItem(item, index)}>Download</div>
+          <div className={`result-top-transcription result-item-btn ${item.status !== 'Succeeded' ? 'result-item-btn__disable' : ''}`} onClick={() => onClickItem(item)}>Download</div>
         </div>
       })
     }

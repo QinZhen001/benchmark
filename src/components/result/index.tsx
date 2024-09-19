@@ -265,7 +265,7 @@ const Result = () => {
       })
     }
     <div className="result-status">
-      Status: Loading file to STT engine(other statuss:Language Detecting,Transcribing,Done)
+      Status: Loading file to STT engine(other status:Language Detecting,Transcribing,Done)
     </div>
     <div className="my-select-button">
       <div className="my-select-button-left" onClick={onClickPrev}>Previous Step</div>

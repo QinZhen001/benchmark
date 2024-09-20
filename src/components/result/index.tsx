@@ -173,7 +173,11 @@ const Result = () => {
       case "Engine 3":
         if (item.jobId) {
           data = await apiDownloadEngine3Task(item.jobId)
-          downloadText(data, `${fileName}_engine3_${item.jobId}.txt`)
+          if (item.jobId.length > 10) {
+            downloadText(data, `${fileName}_engine3_${item.jobId.slice(-10)}.txt`)
+          } else {
+            downloadText(data, `${fileName}_engine3_${item.jobId}.txt`)
+          }
         }
         break;
     }

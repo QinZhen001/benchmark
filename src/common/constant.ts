@@ -15,7 +15,7 @@ export const LANGUAGE_OPTIONS = [
   { label: "Arabic(EG)", value: "ar-EG", code: "ar" },
   { label: "Arabic(SA)", value: "ar-SA", code: "ar" },
   { label: "Arabic(UAE)", value: "ar-AE", code: "ar" },
-  { label: "English(US) 	", value: "en-US", code: "en" },
+  { label: "English", value: "en-US", code: "en" },
   { label: "Hindi", value: "hi-IN", code: "hi" },
   { label: "Korean", value: "ko-KR", code: "ko" },
   { label: "Japanese", value: "ja-JP", code: "ja" },
